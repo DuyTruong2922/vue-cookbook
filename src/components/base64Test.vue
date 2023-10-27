@@ -1,98 +1,74 @@
 <template>
   <div>
-    <button @click="showModal">Add a new item</button>
-
-    <div v-if="isModalOpen" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="hideModal">&times;</span>
-        <h2>Modal Title</h2>
-        <!-- Modal content goes here... -->
-        <form @submit.prevent>
-          <input type="text" v-model="title" placeholder="Title">
-          <br>
-          <input type="text" v-model="content" placeholder="Content">
-          <br>
-          <div>
-            <h1>The Steps</h1>
-            <button @click="addInput">Thêm bước</button>
-            <div v-for="(input, index) in step_description" :key="index">
-              <input v-model="input.step" type="text" placeholder="Step">
-              <br>
-              <input v-model="input.description" type="text" placeholder="Description">
-              <br>
-              <input type="file" @change="uploadFile(index)">
-              <button @click="removeInput(index)">Bỏ bước</button>
-            </div>
-          </div>
-          <br>
-          <br>
-          <button @click="addItem">Push it!</button>
-        </form>
+    <input type="file" multiple @change="handleFileInputChange">
+    <div v-for="(step, index) in stepDescriptions" :key="index">
+      <h3>{{ step.step }}</h3>
+      {{ stepDescriptions }}
+      <input type="text" v-model="step.description">
+      <input type="file" @change="(event) => handleStepFileInputChange(event, index)">
+      <div v-if="step.image">
+        <img :src="step.image" alt="Preview">
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
-// import PostFunction from './PostFunction.vue';
-import { item } from "./item";
+import { ref } from 'vue';
 
-const isModalOpen = ref(false);
-const title = ref("");
-const content = ref("");
-const step_description = reactive([{ step: 'Bước 1', description: '', image: '' }]);
-let count = 2;
+const stepDescriptions = ref([
+  {
+    step: "Bước 1",
+    description: "v",
+    image: "",
+  },
+  {
+    step: "Bước 2",
+    description: "u",
+    image: "",
+  }
+]);
 
-function showModal() {
-  isModalOpen.value = true;
-}
+const handleFileInputChange = (event) => {
+  const files = event.target.files;
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const reader = new FileReader();
 
-function hideModal() {
-  isModalOpen.value = false;
-}
+    reader.onload = () => {
+      const base64Data = reader.result;
+      stepDescriptions.value[i].image = base64Data;
+    };
 
-const uploadFile = (index) => (event) => {
+    reader.readAsDataURL(file);
+  }
+};
+
+const handleStepFileInputChange = (event, index) => {
   const file = event.target.files[0];
-  if (!file) return;
-
   const reader = new FileReader();
-  reader.readAsDataURL(file);
 
   reader.onload = () => {
-    const base64Data = reader.result.split(',')[1];
-    console.log('Base64 Data:', base64Data);
-
-    if (!step_description[index]) {
-      step_description[index] = { step: 'Bước ' + count++, description: '', image: base64Data };
-    } else {
-      step_description[index].image = base64Data;
-    }
-  };
-};
-
-const addInput = () => {
-  step_description.push({ step: 'Bước ' + count++, description: '', image: '' });
-};
-
-const removeInput = (index) => {
-  step_description.splice(index, 1);
-  count--;
-};
-
-const addItem = () => {
-  const newItem = {
-    title: title.value,
-    content: content.value,
-    step_descriptions: step_description
+    const base64Data = reader.result;
+    stepDescriptions.value[index].image = base64Data;
   };
 
-  item.push(newItem);
-
-  // Reset the form values and close the modal
-  title.value = '';
-  content.value = '';
-  step_description.splice(0, step_description.length);
-  hideModal();
+  reader.readAsDataURL(file);
 };
+console.log(stepDescriptions);
+
+// const postData = () => {
+//   const payload = {
+//     created_at: new Date().toISOString(),
+//     updated_at: Math.floor(Date.now() / 1000),
+//     title: "vue fisrt post",
+//     content: "vue",
+//     rating: "rating 1",
+//     step_descriptions: stepDescriptions.value,
+//     id: "1",
+//   };
+
+//   // Perform your HTTP POST request with the payload
+//   console.log(payload);
+// };
 </script>

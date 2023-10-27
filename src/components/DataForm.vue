@@ -15,13 +15,19 @@
                   <div>
                   <h1>The Steps</h1>
                     <button @click="addInput">Thêm bước</button>
-                    <div v-for="(input, index) in step_description" :key="index">
+                    <div v-for="(input, index) in stepDescriptions" :key="index">
                       <input v-model="input.step" type="text" placeholder="step">
                       <br>
                       <input v-model="input.description" type="text" placeholder="description">
                       <br>
-                      <input type="file" @change="uploadFile">
-                      <img :src="imgBase64[index]" :sizes="100" alt="">
+                      <!-- =========================================================================== -->
+                      <!-- BASE64 FUNCTION -->
+                      <!-- <input type="text" v-model="step.description"> -->
+                      <input type="file" @change="(event) => fileToBase64(event, index)">
+                      <div v-if="input.image">
+                        <img :src="input.image" alt="Preview" sizes="100">
+                      </div>
+                      <!-- =========================================================================== -->
                       <button @click="removeInput(index)">Bỏ bước</button>
                     </div>
                   </div>
@@ -29,12 +35,11 @@
                 <br>
                 <button @click="item.push({title:title,
                                             content:content,
-                                            step_descriptions:step_description})">
+                                            step_descriptions:stepDescriptions})">
                   push it !
                 </button>
-                <!-- {{ item }} -->
-                {{ imgBase64s }}
-                <PostFunction/>
+                <!-- <PostFunction/> -->
+                <button @click="pushData">up to api</button>
             </form>
 
           <!-- Modal content goes here... -->
@@ -44,17 +49,12 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue';
-  import PostFunction from './PostFunction.vue'
-  import { item,imgBase64s,step_description } from "./item";
+  import { ref,reactive } from 'vue';
+  import { pushData } from './PostFunction.js'
+  import { item } from "./item";
 
-
-  // temp 
-  // if a0 > a1
-  // temp = a0
-  // a0 = a1
-  // a1 = temp
-  
+  // ===========================================================================
+  // MODAL FUNCTIONS
   const isModalOpen = ref(false);
   
   function showModal() {
@@ -64,50 +64,47 @@
     this.isModalOpen = false;
   }
 
-const title =ref("");
-const content =ref("");
-// const file = ref(null);
-const count =ref(2);
+  const title =ref("");
+  const content =ref("");
+  const count =ref(2);
+  const stepDescriptions = reactive([{
+    step: "Bước 1",
+    description: "",
+    image: "",
+  }]);
+  // ===========================================================================
 
-
-
-const uploadFile = (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-
-  reader.onload = () => {
-    const base64Data = reader.result.split(',')[1];
-
-    console.log('Base64 Data:', base64Data);
-
-    // if (!step_description) {
-    //   step_description.push({ step: 'Bước 1', description: '', image: base64Data });
-    // } else {
-    //   step_description.push({ step: 'Bước ' + count.value++, description: '', image: base64Data });
-    // }
-    imgBase64s.push(base64Data)
-
-  };
-
-  // Reset the selected file
-  event.target.value = null;
-};
-
-
-
-
+  // ===========================================================================
+// ADD INPUT FIELD
 const addInput = () => {
-  step_description.push({ step: 'Bước '+count.value++,description:'' });
+  stepDescriptions.push({ step: 'Bước '+count.value++,description:'' });
   
 };
 
 const removeInput = (index) => {
-  step_description.splice(index, 1);
+  stepDescriptions.splice(index, 1);
   count.value--;
 };
+// ===========================================================================
+
+
+  // ===========================================================================
+  // BASE64 FUNCTION
+  const fileToBase64 = (event, index) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64Data = reader.result;
+      stepDescriptions[index].image = base64Data;
+    };
+
+    reader.readAsDataURL(file);
+  };
+// ===========================================================================
+
+
+
   </script>
   
   <style>

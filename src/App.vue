@@ -1,10 +1,10 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <!-- <base64Test/> -->
+  
   <DataForm />
   <GetData msg="CookBook With Vue"/>
-  
-  <!-- <CookBook/> -->
+  <!-- <base64Test/> -->
+
 </template>
 
 <script setup>

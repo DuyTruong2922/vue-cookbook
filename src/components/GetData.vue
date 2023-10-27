@@ -8,6 +8,7 @@
         </div>
 
            <div class="accordion-content" v-if="item.isCollapsed" > <!--TO SHOW THIS-->
+            <button @click="deleteData(index)">Bỏ</button>
               {{ item.content }} 
               <br>
               <h2>The steps</h2>
@@ -27,6 +28,7 @@
 <script setup>
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
+  import { deleteData } from './DeleteFunction';
 
   const items = ref([]);
 

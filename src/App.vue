@@ -1,5 +1,6 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
+  <!-- <base64Test/> -->
   <DataForm />
   <GetData msg="CookBook With Vue"/>
   
@@ -9,6 +10,8 @@
 <script setup>
 import GetData from './components/GetData.vue'
 import DataForm from './components/DataForm.vue'
+// import base64Test from './components/base64Test.vue'
+
 
 
 

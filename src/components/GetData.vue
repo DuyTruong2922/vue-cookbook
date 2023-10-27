@@ -11,9 +11,11 @@
               {{ item.content }} 
               <br>
               <h2>The steps</h2>
-              <div v-for="item in item.step_descriptons" :key="item.id">
+              
+              <div v-for="item in item.step_descriptions" :key="item.id">
+                {{ item.step }}
                 <img :src="item.image" />
-                      {{ item.description }}
+                {{ item.description }}
               </div>
            </div>
 

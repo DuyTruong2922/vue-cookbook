@@ -19,19 +19,21 @@
                       <input v-model="input.step" type="text" placeholder="step">
                       <br>
                       <input v-model="input.description" type="text" placeholder="description">
+                      <br>
+                      <input type="file" @change="uploadFile">
+                      <img :src="imgBase64[index]" :sizes="100" alt="">
                       <button @click="removeInput(index)">Bỏ bước</button>
                     </div>
                   </div>
                 <br>
                 <br>
                 <button @click="item.push({title:title,
-                                                        content:content,
-                                                        step_description:{
-                                                          step:step,
-                                                          description:step_description
-                                                        }})">
+                                            content:content,
+                                            step_descriptions:step_description})">
                   push it !
                 </button>
+                <!-- {{ item }} -->
+                {{ imgBase64s }}
                 <PostFunction/>
             </form>
 
@@ -42,9 +44,17 @@
   </template>
   
   <script setup>
-  import { ref,reactive } from 'vue';
+  import { ref } from 'vue';
   import PostFunction from './PostFunction.vue'
+  import { item,imgBase64s,step_description } from "./item";
 
+
+  // temp 
+  // if a0 > a1
+  // temp = a0
+  // a0 = a1
+  // a1 = temp
+  
   const isModalOpen = ref(false);
   
   function showModal() {
@@ -56,11 +66,38 @@
 
 const title =ref("");
 const content =ref("");
-const step =ref("");
-
-const item =ref([]);
+// const file = ref(null);
 const count =ref(2);
-const step_description = reactive([{ step: 'Bước 1',description:'' }]);
+
+
+
+const uploadFile = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
+  reader.onload = () => {
+    const base64Data = reader.result.split(',')[1];
+
+    console.log('Base64 Data:', base64Data);
+
+    // if (!step_description) {
+    //   step_description.push({ step: 'Bước 1', description: '', image: base64Data });
+    // } else {
+    //   step_description.push({ step: 'Bước ' + count.value++, description: '', image: base64Data });
+    // }
+    imgBase64s.push(base64Data)
+
+  };
+
+  // Reset the selected file
+  event.target.value = null;
+};
+
+
+
 
 const addInput = () => {
   step_description.push({ step: 'Bước '+count.value++,description:'' });

@@ -52,7 +52,11 @@
       onMounted(fetchData);
   
 
-
+      const passData = (id,item)  => {
+      updateItem.push(item)
+      console.log(id,updateItem);
+      // updatePostById(id);
+    };
      function collapse(index) {
       this.items[index].isCollapsed = !this.items[index].isCollapsed;
     }
@@ -64,11 +68,7 @@
 
 
 
-    const passData = (id,item)  => {
-      updateItem.push(item)
-      console.log(id,updateItem);
-      // updatePostById(id);
-    };
+
 
     
 

@@ -51,7 +51,7 @@
   <script setup>
   import { ref,reactive } from 'vue';
   import { pushData } from '../js/PostFunction'
-  import { item } from "../js/item";
+  import { item } from "../js/PostFunction";
 
   // ===========================================================================
   // MODAL FUNCTIONS

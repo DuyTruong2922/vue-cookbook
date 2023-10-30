@@ -1,5 +1,7 @@
-import { item } from './item.js';
 import axios from 'axios';
+import { reactive } from 'vue'
+
+export const item = reactive([]);
 
 
 export const pushData = async () => {
@@ -8,6 +10,7 @@ export const pushData = async () => {
             .then(function (response) {
                 console.log(response);
                 alert("da post")
+                item[0] = '';
             })
             .catch(function (error) {
                 console.log(error);

@@ -9,14 +9,14 @@
           <!-- Modal content goes here... -->
           {{ updateItem }}
             <form @submit.prevent>
-                <input type="text" v-model="updateItem.title" placeholder="title">
+                <input type="text" v-model="updateItem[0].title" placeholder="title">
                 <br>
-                <input type="text" v-model="post.content" placeholder="content">
+                <input type="text" v-model="updateItem[0].content" placeholder="content">
                 <br>
                   <div>
                   <h1>The Steps</h1>
                     <button @click="addInput">Thêm bước</button>
-                    <div v-for="(input, index) in updateItem.step_descriptions" :key="index">
+                    <div v-for="(input, index) in updateItem[0].step_descriptions" :key="index">
                       <input v-model="input.step" type="text" placeholder="step">
                       {{ input.step }}
                       <br>
@@ -39,7 +39,7 @@
                   push it !
                 </button>
                 <!-- <PostFunction/> -->
-                <button @click="updatePostById">up to api</button>
+                <button @click="updatePostById(updateItem[0].id)">up to api</button>
             </form>
 
           <!-- Modal content goes here... -->
@@ -49,9 +49,10 @@
   </template>
   
   <script setup>
-  import { ref,reactive } from 'vue';
+  import { ref } from 'vue';
 
   import { updateItem,updatePostById } from '../js/UpdateFunction'
+  console.log(updateItem);
   // ===========================================================================
   // MODAL FUNCTIONS
   const isModalOpen = ref(false);
@@ -63,44 +64,18 @@
     this.isModalOpen = false;
   }
 
-//   const title =ref("");
-//   const content =ref("");
-//   const count =ref(2);
-//   const stepDescriptions = reactive([{
-//     step: "Bước 1",
-//     description: "",
-//     image: "",
-//   }]);
-const post = reactive({
-      title: "tit" ,
-      content: "vue",
-      rating: "rating 1",
-      step_descriptions: [
-        {
-          step: "Bước 1",
-          description: "v",
-          image: ""
-        },
-        {
-          step: "Bước 2",
-          description: "u",
-          image: ""
-        }
-      ],
-      id: "1"
-    });
-
-//   // ===========================================================================
+  const count =ref(2);
+  // ===========================================================================
 
   // ===========================================================================
 // ADD INPUT FIELD
 const addInput = () => {
-    updateItem.step_descriptions.push({ step: 'Bước ',description:'' });
+    updateItem[0].step_descriptions.push({ step: 'Bước '+count.value++,description:'' });
   
 };
 
 const removeInput = (index) => {
-    updateItem.step_descriptions.splice(index, 1);
+    updateItem[0].step_descriptions.splice(index, 1);
 };
 // ===========================================================================
 
@@ -113,7 +88,7 @@ const removeInput = (index) => {
 
     reader.onload = () => {
       const base64Data = reader.result;
-      updateItem.step_descriptions[index].image = base64Data;
+      updateItem[0].step_descriptions[index].image = base64Data;
     };
 
     reader.readAsDataURL(file);

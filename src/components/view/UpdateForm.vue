@@ -7,16 +7,16 @@
           <span class="close" @click="hideModal()">&times;</span>
           <h2>Modal Title</h2>
           <!-- Modal content goes here... -->
-          {{ updateItem }}
+          {{ updateObj }}
             <form @submit.prevent>
-                <input type="text" v-model="updateItem[0].title" placeholder="title">
+                <input type="text" v-model="updateObj.value.title" placeholder="title">
                 <br>
-                <input type="text" v-model="updateItem[0].content" placeholder="content">
+                <input type="text" v-model="updateObj.value.content" placeholder="content">
                 <br>
                   <div>
                   <h1>The Steps</h1>
                     <button @click="addInput">Thêm bước</button>
-                    <div v-for="(input, index) in updateItem[0].step_descriptions" :key="index">
+                    <div v-for="(input, index) in updateObj.value.step_descriptions" :key="index">
                       <input v-model="input.step" type="text" placeholder="step">
                       {{ input.step }}
                       <br>
@@ -24,7 +24,6 @@
                       <br>
                       <!-- =========================================================================== -->
                       <!-- BASE64 FUNCTION -->
-                      <!-- <input type="text" v-model="step.description"> -->
                       <input type="file" @change="(event) => fileToBase64(event, index)">
                       <div v-if="input.image">
                         <img :src="input.image" alt="Preview" sizes="100">
@@ -34,12 +33,8 @@
                     </div>
                   </div>
                 <br>
-                <br>
-                <button >
-                  push it !
-                </button>
                 <!-- <PostFunction/> -->
-                <button @click="updatePostById(updateItem[0].id)">up to api</button>
+                <button @click="updatePostById(updateObj.value.id)">up to api</button>
             </form>
 
           <!-- Modal content goes here... -->
@@ -51,8 +46,8 @@
   <script setup>
   import { ref } from 'vue';
 
-  import { updateItem,updatePostById } from '../js/UpdateFunction'
-  console.log(updateItem);
+  import { updateObj,updatePostById } from '../js/UpdateFunction'
+  console.log(updateObj);
   // ===========================================================================
   // MODAL FUNCTIONS
   const isModalOpen = ref(false);
@@ -70,12 +65,12 @@
   // ===========================================================================
 // ADD INPUT FIELD
 const addInput = () => {
-    updateItem[0].step_descriptions.push({ step: 'Bước '+count.value++,description:'' });
+    updateObj.step_descriptions.push({ step: 'Bước '+count.value++,description:'' });
   
 };
 
 const removeInput = (index) => {
-    updateItem[0].step_descriptions.splice(index, 1);
+    updateObj.step_descriptions.splice(index, 1);
 };
 // ===========================================================================
 
@@ -88,13 +83,12 @@ const removeInput = (index) => {
 
     reader.onload = () => {
       const base64Data = reader.result;
-      updateItem[0].step_descriptions[index].image = base64Data;
+      updateObj.step_descriptions[index].image = base64Data;
     };
 
     reader.readAsDataURL(file);
   };
 // ===========================================================================
-
 
 
   </script>

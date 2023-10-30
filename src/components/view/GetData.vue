@@ -3,13 +3,14 @@
     <h1>{{ msg }}</h1>
       <div v-for="(item,index) in items" :key="item.id" class="container">
 
-        <div class="accordion-header"  @click="collapse(index)"> <!--CLICK THIS-->
+        <div class="accordion-header"  @click="collapse(index,item)"> <!--CLICK THIS-->
           <h6 class="accordion-heading" >📖{{ item.title }}</h6>
         </div>
 
            <div class="accordion-content" v-if="item.isCollapsed" > <!--TO SHOW THIS-->
             <button @click="deleteItem(item.id)">Bỏ</button>
-            <UpdateForm/>
+            <UpdateForm item/>
+
               {{ item.content }} 
               <br>
               <h2>The steps</h2>
@@ -20,7 +21,7 @@
                 {{ item.description }}
               </div>
            </div>
-      <button @click="passData(item.id, item)">pass data</button>
+      <!-- <button @click="passData(item.id, item)">pass data</button> -->
           
       </div> 
 
@@ -32,9 +33,8 @@
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
   import { deleteItem } from '../js/DeleteFunction'
-  import { updateItem } from '../js/UpdateFunction'
+  import { updateObj } from '../js/UpdateFunction'
   import UpdateForm from './UpdateForm.vue'
-
 
 
   const items = ref([]);
@@ -48,30 +48,12 @@
           console.error(error);
         }
       };
-
       onMounted(fetchData);
   
-
-      const passData = (id,item)  => {
-      updateItem.push(item)
-      console.log(id,updateItem);
-      // updatePostById(id);
-    };
-     function collapse(index) {
+     function collapse(index,item) {
+      updateObj.value = item
       this.items[index].isCollapsed = !this.items[index].isCollapsed;
     }
-
-
-
-
-
-
-
-
-
-
-    
-
 
 </script>
 

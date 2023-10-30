@@ -22,7 +22,6 @@
                       <br>
                       <!-- =========================================================================== -->
                       <!-- BASE64 FUNCTION -->
-                      <!-- <input type="text" v-model="step.description"> -->
                       <input type="file" @change="(event) => fileToBase64(event, index)">
                       <div v-if="input.image">
                         <img :src="input.image" alt="Preview" sizes="100">
@@ -33,13 +32,9 @@
                   </div>
                 <br>
                 <br>
-                <button @click="item.push({title:title,
-                                            content:content,
-                                            step_descriptions:stepDescriptions})">
-                  push it !
-                </button>
+                
                 <!-- <PostFunction/> -->
-                <button @click="pushData">up to api</button>
+                <button @click="postItem">up to api</button>
             </form>
 
           <!-- Modal content goes here... -->
@@ -102,10 +97,13 @@ const removeInput = (index) => {
     reader.readAsDataURL(file);
   };
 // ===========================================================================
-
-
-
+const postItem = () => {
+  item.value= {title:title, content:content, step_descriptions:stepDescriptions};
+  console.log(item);
+  pushData();
+};
   </script>
+
   
   <style>
   .modal {

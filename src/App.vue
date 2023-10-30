@@ -8,9 +8,9 @@
 </template>
 
 <script setup>
-import GetData from './components/GetData.vue'
-import DataForm from './components/DataForm.vue'
-// import base64Test from './components/base64Test.vue'
+import GetData from './components/view/GetData.vue'
+import DataForm from './components/view/DataForm.vue'
+
 
 
 

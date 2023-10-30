@@ -1,22 +1,24 @@
 <template>
     <div>
-      <button @click="showModal()">add a new item</button>
+      <button @click="showModal()">update</button>
   
       <div v-if="isModalOpen" class="modal">
         <div class="modal-content">
           <span class="close" @click="hideModal()">&times;</span>
           <h2>Modal Title</h2>
           <!-- Modal content goes here... -->
+          {{ updateItem }}
             <form @submit.prevent>
-                <input type="text" v-model="title" placeholder="title">
+                <input type="text" v-model="updateItem.title" placeholder="title">
                 <br>
-                <input type="text" v-model="content" placeholder="content">
+                <input type="text" v-model="post.content" placeholder="content">
                 <br>
                   <div>
                   <h1>The Steps</h1>
                     <button @click="addInput">Thêm bước</button>
-                    <div v-for="(input, index) in stepDescriptions" :key="index">
+                    <div v-for="(input, index) in updateItem.step_descriptions" :key="index">
                       <input v-model="input.step" type="text" placeholder="step">
+                      {{ input.step }}
                       <br>
                       <input v-model="input.description" type="text" placeholder="description">
                       <br>
@@ -33,13 +35,11 @@
                   </div>
                 <br>
                 <br>
-                <button @click="item.push({title:title,
-                                            content:content,
-                                            step_descriptions:stepDescriptions})">
+                <button >
                   push it !
                 </button>
                 <!-- <PostFunction/> -->
-                <button @click="pushData">up to api</button>
+                <button @click="updatePostById">up to api</button>
             </form>
 
           <!-- Modal content goes here... -->
@@ -50,9 +50,8 @@
   
   <script setup>
   import { ref,reactive } from 'vue';
-  import { pushData } from './PostFunction.js'
-  import { item } from "./item";
 
+  import { updateItem,updatePostById } from '../js/UpdateFunction'
   // ===========================================================================
   // MODAL FUNCTIONS
   const isModalOpen = ref(false);
@@ -64,26 +63,44 @@
     this.isModalOpen = false;
   }
 
-  const title =ref("");
-  const content =ref("");
-  const count =ref(2);
-  const stepDescriptions = reactive([{
-    step: "Bước 1",
-    description: "",
-    image: "",
-  }]);
-  // ===========================================================================
+//   const title =ref("");
+//   const content =ref("");
+//   const count =ref(2);
+//   const stepDescriptions = reactive([{
+//     step: "Bước 1",
+//     description: "",
+//     image: "",
+//   }]);
+const post = reactive({
+      title: "tit" ,
+      content: "vue",
+      rating: "rating 1",
+      step_descriptions: [
+        {
+          step: "Bước 1",
+          description: "v",
+          image: ""
+        },
+        {
+          step: "Bước 2",
+          description: "u",
+          image: ""
+        }
+      ],
+      id: "1"
+    });
+
+//   // ===========================================================================
 
   // ===========================================================================
 // ADD INPUT FIELD
 const addInput = () => {
-  stepDescriptions.push({ step: 'Bước '+count.value++,description:'' });
+    updateItem.step_descriptions.push({ step: 'Bước ',description:'' });
   
 };
 
 const removeInput = (index) => {
-  stepDescriptions.splice(index, 1);
-  count.value--;
+    updateItem.step_descriptions.splice(index, 1);
 };
 // ===========================================================================
 
@@ -96,7 +113,7 @@ const removeInput = (index) => {
 
     reader.onload = () => {
       const base64Data = reader.result;
-      stepDescriptions[index].image = base64Data;
+      updateItem.step_descriptions[index].image = base64Data;
     };
 
     reader.readAsDataURL(file);

@@ -1,16 +1,17 @@
-// import { item } from './item.js';
+import { item } from './item.js';
 import axios from 'axios';
 
 
-export const deleteData =  async () => {
+export const pushData = async () => {
 
-            await axios.delete(process.env.VUE_APP_API_MOCKAPI[0])
+            await axios.post(process.env.VUE_APP_API_MOCKAPI, item[0])
             .then(function (response) {
                 console.log(response);
-                alert("ok da xoa")
+                alert("da post")
             })
             .catch(function (error) {
                 console.log(error);
             });
-
+            
       };
+

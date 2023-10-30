@@ -8,7 +8,8 @@
         </div>
 
            <div class="accordion-content" v-if="item.isCollapsed" > <!--TO SHOW THIS-->
-            <button @click="deleteData(index)">Bỏ</button>
+            <button @click="deleteItem(item.id)">Bỏ</button>
+            <UpdateForm/>
               {{ item.content }} 
               <br>
               <h2>The steps</h2>
@@ -19,16 +20,22 @@
                 {{ item.description }}
               </div>
            </div>
-
+      <button @click="passData(item.id, item)">pass data</button>
+          
       </div> 
 
   </div>
+
 </template>
 
 <script setup>
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
-  import { deleteData } from './DeleteFunction';
+  import { deleteItem } from '../js/DeleteFunction'
+  import { updateItem } from '../js/UpdateFunction'
+  import UpdateForm from './UpdateForm.vue'
+
+
 
   const items = ref([]);
 
@@ -52,6 +59,18 @@
 
 
 
+
+
+
+
+
+    const passData = (id,item)  => {
+      updateItem.push(item)
+      console.log(id,updateItem);
+      // updatePostById(id);
+    };
+
+    
 
 
 </script>
